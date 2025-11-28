@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,8 +14,13 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [locationAccess, setLocationAccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
   const { register } = useAuth();
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -91,9 +96,9 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="mx-auto h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center">
+      <div className={`max-w-3xl mx-auto transition-all duration-700 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="text-center mb-10 animate-fade-in-up">
+          <div className="mx-auto h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center pulse-animation">
             <span className="text-white text-2xl font-bold">RB</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -104,12 +109,19 @@ const Register = () => {
           </p>
         </div>
         
-        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          {errors.submit && (
+            <div className="rounded-md bg-red-50 p-4 mb-4 animate-fade-in-up">
+              <div className="text-sm text-red-700">
+                {errors.submit}
+              </div>
+            </div>
+          )}
           <form className="mb-0 space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Full Name */}
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
                   Full Name
                 </label>
                 <div className="mt-1">
@@ -118,7 +130,7 @@ const Register = () => {
                     name="fullName"
                     type="text"
                     required
-                    className={`appearance-none block w-full px-3 py-2 border ${errors.fullName ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    className={`appearance-none block w-full px-3 py-2 border ${errors.fullName ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md`}
                     value={formData.fullName}
                     onChange={handleChange}
                   />
@@ -127,8 +139,8 @@ const Register = () => {
               </div>
               
               {/* College Email */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   College Email Address
                 </label>
                 <div className="mt-1">
@@ -137,7 +149,7 @@ const Register = () => {
                     name="email"
                     type="email"
                     required
-                    className={`appearance-none block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    className={`appearance-none block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md`}
                     placeholder="student@college.edu.in"
                     value={formData.email}
                     onChange={handleChange}
@@ -147,8 +159,8 @@ const Register = () => {
               </div>
               
               {/* Phone Number */}
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                   Phone Number
                 </label>
                 <div className="mt-1">
@@ -157,7 +169,7 @@ const Register = () => {
                     name="phone"
                     type="tel"
                     required
-                    className={`appearance-none block w-full px-3 py-2 border ${errors.phone ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    className={`appearance-none block w-full px-3 py-2 border ${errors.phone ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md`}
                     placeholder="9876543210"
                     value={formData.phone}
                     onChange={handleChange}
@@ -167,8 +179,8 @@ const Register = () => {
               </div>
               
               {/* Student ID */}
-              <div>
-                <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 mb-1">
                   Student ID (Optional)
                 </label>
                 <div className="mt-1">
@@ -176,7 +188,7 @@ const Register = () => {
                     id="studentId"
                     name="studentId"
                     type="text"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
                     placeholder="Enter your student ID"
                     value={formData.studentId}
                     onChange={handleChange}
@@ -185,8 +197,8 @@ const Register = () => {
               </div>
               
               {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
                 <div className="mt-1">
@@ -195,7 +207,7 @@ const Register = () => {
                     name="password"
                     type="password"
                     required
-                    className={`appearance-none block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    className={`appearance-none block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md`}
                     value={formData.password}
                     onChange={handleChange}
                   />
@@ -204,8 +216,8 @@ const Register = () => {
               </div>
               
               {/* Confirm Password */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
                   Confirm Password
                 </label>
                 <div className="mt-1">
@@ -214,7 +226,7 @@ const Register = () => {
                     name="confirmPassword"
                     type="password"
                     required
-                    className={`appearance-none block w-full px-3 py-2 border ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    className={`appearance-none block w-full px-3 py-2 border ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md`}
                     value={formData.confirmPassword}
                     onChange={handleChange}
                   />
@@ -224,7 +236,7 @@ const Register = () => {
             </div>
             
             {/* Location Access */}
-            <div className="bg-blue-50 p-4 rounded-md">
+            <div className="bg-blue-50 p-4 rounded-md animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -241,7 +253,7 @@ const Register = () => {
                       <button
                         type="button"
                         onClick={handleLocationAccess}
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
                       >
                         Grant Location Access
                       </button>
@@ -259,17 +271,39 @@ const Register = () => {
             </div>
             
             {/* Submit Button */}
-            <div>
+            <div className="animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? (
+                  <>
+                    <div className="loading-spinner mr-2"></div>
+                    Creating Account...
+                  </>
+                ) : (
+                  'Create Account'
+                )}
               </button>
             </div>
           </form>
           
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center animate-fade-in-up" style={{ animationDelay: '0.9s' }}>
             <p className="text-sm text-gray-600">
-              Alr
+              Already have an account?{' '}
+              <button
+                onClick={() => navigate('/login')}
+                className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-300"
+              >
+                Sign in
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;

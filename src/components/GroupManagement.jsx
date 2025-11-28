@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const GroupManagement = () => {
   const { groupId } = useParams();
   const [activeTab, setActiveTab] = useState('members');
   const [message, setMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   // Mock data for group members
   const groupMembers = [
@@ -41,15 +46,15 @@ const GroupManagement = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-white shadow sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <div>
+            <div className="animate-fade-in-left">
               <h1 className="text-2xl font-bold text-gray-900">Group Management</h1>
               <p className="text-gray-600">Group ID: {groupId}</p>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+            <div className="flex items-center space-x-4 animate-fade-in-right">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 ${
                 pendingPayments > 0 
                   ? 'bg-yellow-100 text-yellow-800' 
                   : 'bg-green-100 text-green-800'
@@ -58,7 +63,7 @@ const GroupManagement = () => {
                   ? `${pendingPayments} pending payments` 
                   : 'All payments received'}
               </span>
-              <button className="text-blue-600 hover:text-blue-800 font-medium">
+              <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300">
                 Back to Dashboard
               </button>
             </div>
@@ -66,27 +71,27 @@ const GroupManagement = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <main className={`max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Group Info and Tabs */}
           <div className="lg:col-span-1">
-            <div className="bg-white shadow rounded-lg overflow-hidden mb-6">
+            <div className="bg-white shadow rounded-lg overflow-hidden mb-6 card-hover animate-fade-in-up">
               <div className="p-6">
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Group Details</h2>
                 <div className="space-y-4">
-                  <div>
+                  <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                     <p className="text-sm text-gray-500">Pickup</p>
                     <p className="font-medium">Delhi University North Campus</p>
                   </div>
-                  <div>
+                  <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     <p className="text-sm text-gray-500">Dropoff</p>
                     <p className="font-medium">Connaught Place</p>
                   </div>
-                  <div>
+                  <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                     <p className="text-sm text-gray-500">Date & Time</p>
                     <p className="font-medium">Dec 15, 2023 at 6:30 PM</p>
                   </div>
-                  <div>
+                  <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
                     <p className="text-sm text-gray-500">Your Share</p>
                     <p className="text-2xl font-bold text-blue-600">₹237.50</p>
                   </div>
@@ -94,12 +99,12 @@ const GroupManagement = () => {
               </div>
             </div>
 
-            <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="bg-white shadow rounded-lg overflow-hidden card-hover animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               <div className="border-b border-gray-200">
                 <nav className="-mb-px flex">
                   <button
                     onClick={() => setActiveTab('members')}
-                    className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                    className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                       activeTab === 'members'
                         ? 'border-blue-500 text-blue-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -109,7 +114,7 @@ const GroupManagement = () => {
                   </button>
                   <button
                     onClick={() => setActiveTab('chat')}
-                    className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                    className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                       activeTab === 'chat'
                         ? 'border-blue-500 text-blue-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -125,18 +130,18 @@ const GroupManagement = () => {
           {/* Right Column - Content Based on Tab */}
           <div className="lg:col-span-2">
             {activeTab === 'members' ? (
-              <div className="bg-white shadow rounded-lg overflow-hidden">
+              <div className="bg-white shadow rounded-lg overflow-hidden card-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-lg font-medium text-gray-900">Group Members</h2>
-                    <button className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <button className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
                       Invite More
                     </button>
                   </div>
                   
                   <div className="space-y-4">
                     {groupMembers.map((member) => (
-                      <div key={member.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                      <div key={member.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg transition-all duration-300 hover:shadow-md animate-fade-in-up" style={{ animationDelay: `${0.1 * member.id}s` }}>
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                             {member.avatar}
@@ -148,14 +153,14 @@ const GroupManagement = () => {
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-all duration-300 ${
                             member.paymentStatus === 'paid' 
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-yellow-100 text-yellow-800'
                           }`}>
                             {member.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                           </span>
-                          <button className="text-blue-600 hover:text-blue-900 text-sm font-medium">
+                          <button className="text-blue-600 hover:text-blue-900 text-sm font-medium transition-colors duration-300">
                             Message
                           </button>
                         </div>
@@ -165,7 +170,7 @@ const GroupManagement = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-white shadow rounded-lg overflow-hidden flex flex-col h-[600px]">
+              <div className="bg-white shadow rounded-lg overflow-hidden flex flex-col h-[600px] card-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 <div className="p-6 border-b border-gray-200">
                   <h2 className="text-lg font-medium text-gray-900">Group Chat</h2>
                 </div>
@@ -173,7 +178,7 @@ const GroupManagement = () => {
                 <div className="flex-1 overflow-y-auto p-6">
                   <div className="space-y-6">
                     {messages.map((msg) => (
-                      <div key={msg.id} className="flex">
+                      <div key={msg.id} className="flex animate-fade-in-up" style={{ animationDelay: `${0.1 * msg.id}s` }}>
                         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                           {msg.avatar}
                         </div>
@@ -193,14 +198,14 @@ const GroupManagement = () => {
                   <form onSubmit={handleSendMessage} className="flex">
                     <input
                       type="text"
-                      className="flex-1 min-w-0 block w-full px-3 py-2 rounded-l-md border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="flex-1 min-w-0 block w-full px-3 py-2 rounded-l-md border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
                       placeholder="Type your message..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                     />
                     <button
                       type="submit"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
                     >
                       Send
                     </button>

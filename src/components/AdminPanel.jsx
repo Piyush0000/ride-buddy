@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('bookings');
+  const { user } = useAuth();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   // Mock data for bookings
   const bookings = [
@@ -28,21 +35,21 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-white shadow sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <button className="text-blue-600 hover:text-blue-800 font-medium">
+            <h1 className="text-2xl font-bold text-gray-900 animate-fade-in-left">Admin Dashboard</h1>
+            <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 animate-fade-in-right">
               Logout
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <main className={`max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white shadow rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-blue-100">
                 <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,7 +63,7 @@ const AdminPanel = () => {
             </div>
           </div>
           
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white shadow rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-green-100">
                 <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,7 +77,7 @@ const AdminPanel = () => {
             </div>
           </div>
           
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white shadow rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-yellow-100">
                 <svg className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,7 +91,7 @@ const AdminPanel = () => {
             </div>
           </div>
           
-          <div className="bg-white shadow rounded-lg p-6">
+          <div className="bg-white shadow rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-purple-100">
                 <svg className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,12 +107,12 @@ const AdminPanel = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="bg-white shadow rounded-lg overflow-hidden card-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex">
               <button
                 onClick={() => setActiveTab('bookings')}
-                className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                   activeTab === 'bookings'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -115,7 +122,7 @@ const AdminPanel = () => {
               </button>
               <button
                 onClick={() => setActiveTab('groups')}
-                className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                   activeTab === 'groups'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -125,7 +132,7 @@ const AdminPanel = () => {
               </button>
               <button
                 onClick={() => setActiveTab('commission')}
-                className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                   activeTab === 'commission'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -135,7 +142,7 @@ const AdminPanel = () => {
               </button>
               <button
                 onClick={() => setActiveTab('manual')}
-                className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
+                className={`py-4 px-6 text-center border-b-2 font-medium text-sm transition-all duration-300 ${
                   activeTab === 'manual'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -162,8 +169,8 @@ const AdminPanel = () => {
 const BookingsTable = ({ bookings }) => {
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Bookings</h2>
-      <div className="overflow-x-auto">
+      <h2 className="text-lg font-medium text-gray-900 mb-4 animate-fade-in-up">Recent Bookings</h2>
+      <div className="overflow-x-auto animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -195,7 +202,7 @@ const BookingsTable = ({ bookings }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {bookings.map((booking) => (
-              <tr key={booking.id}>
+              <tr key={booking.id} className="animate-fade-in-up" style={{ animationDelay: `${0.1 * booking.id}s` }}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   #{booking.id}
                 </td>
@@ -212,7 +219,7 @@ const BookingsTable = ({ bookings }) => {
                   {booking.groupSize}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full transition-all duration-300 ${
                     booking.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
                     booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                     'bg-gray-100 text-gray-800'
@@ -224,10 +231,10 @@ const BookingsTable = ({ bookings }) => {
                   {booking.commission}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3">
+                  <button className="text-blue-600 hover:text-blue-900 mr-3 transition-colors duration-300">
                     View
                   </button>
-                  <button className="text-red-600 hover:text-red-900">
+                  <button className="text-red-600 hover:text-red-900 transition-colors duration-300">
                     Cancel
                   </button>
                 </td>
@@ -244,8 +251,8 @@ const BookingsTable = ({ bookings }) => {
 const GroupsTable = ({ groups }) => {
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Active Groups</h2>
-      <div className="overflow-x-auto">
+      <h2 className="text-lg font-medium text-gray-900 mb-4 animate-fade-in-up">Active Groups</h2>
+      <div className="overflow-x-auto animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -271,7 +278,7 @@ const GroupsTable = ({ groups }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {groups.map((group) => (
-              <tr key={group.id}>
+              <tr key={group.id} className="animate-fade-in-up" style={{ animationDelay: `${0.1 * group.id.charCodeAt(3)}s` }}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {group.id}
                 </td>
@@ -285,7 +292,7 @@ const GroupsTable = ({ groups }) => {
                   {group.date}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full transition-all duration-300 ${
                     group.status === 'Active' ? 'bg-green-100 text-green-800' :
                     group.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                     'bg-gray-100 text-gray-800'
@@ -294,10 +301,10 @@ const GroupsTable = ({ groups }) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3">
+                  <button className="text-blue-600 hover:text-blue-900 mr-3 transition-colors duration-300">
                     View
                   </button>
-                  <button className="text-red-600 hover:text-red-900">
+                  <button className="text-red-600 hover:text-red-900 transition-colors duration-300">
                     Dissolve
                   </button>
                 </td>
@@ -314,37 +321,37 @@ const GroupsTable = ({ groups }) => {
 const CommissionStats = ({ data }) => {
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Commission Overview</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-4 animate-fade-in-up">Commission Overview</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gray-50 rounded-lg p-6">
+        <div className="bg-gray-50 rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <h3 className="text-md font-medium text-gray-900 mb-4">Commission Summary</h3>
           <div className="space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               <span className="text-gray-600">Total Commission Earned</span>
               <span className="font-medium">{data.totalCommission}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <span className="text-gray-600">This Month</span>
               <span className="font-medium">{data.thisMonth}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               <span className="text-gray-600">Last Month</span>
               <span className="font-medium">{data.lastMonth}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <span className="text-gray-600">Total Bookings</span>
               <span className="font-medium">{data.bookingsCount}</span>
             </div>
           </div>
         </div>
         
-        <div className="bg-gray-50 rounded-lg p-6">
+        <div className="bg-gray-50 rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <h3 className="text-md font-medium text-gray-900 mb-4">Monthly Trend</h3>
           <div className="h-64 flex items-end space-x-2">
             {[1200, 800, 1500, 900, 1100, 1300].map((amount, index) => (
-              <div key={index} className="flex flex-col items-center flex-1">
+              <div key={index} className="flex flex-col items-center flex-1 animate-fade-in-up" style={{ animationDelay: `${0.1 * index}s` }}>
                 <div 
-                  className="w-full bg-blue-600 rounded-t"
+                  className="w-full bg-blue-600 rounded-t transition-all duration-500 hover:opacity-75"
                   style={{ height: `${amount / 20}%` }}
                 ></div>
                 <span className="text-xs text-gray-500 mt-2">M{index + 1}</span>
@@ -384,10 +391,10 @@ const ManualBookingForm = () => {
 
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Create Manual Booking</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-4 animate-fade-in-up">Create Manual Booking</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             <label htmlFor="user" className="block text-sm font-medium text-gray-700 mb-1">
               User
             </label>
@@ -395,7 +402,7 @@ const ManualBookingForm = () => {
               id="user"
               name="user"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.user}
               onChange={handleChange}
             >
@@ -407,7 +414,7 @@ const ManualBookingForm = () => {
             </select>
           </div>
           
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <label htmlFor="groupSize" className="block text-sm font-medium text-gray-700 mb-1">
               Group Size
             </label>
@@ -415,7 +422,7 @@ const ManualBookingForm = () => {
               id="groupSize"
               name="groupSize"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.groupSize}
               onChange={handleChange}
             >
@@ -425,7 +432,7 @@ const ManualBookingForm = () => {
             </select>
           </div>
           
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <label htmlFor="pickup" className="block text-sm font-medium text-gray-700 mb-1">
               Pickup Location
             </label>
@@ -433,7 +440,7 @@ const ManualBookingForm = () => {
               id="pickup"
               name="pickup"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.pickup}
               onChange={handleChange}
             >
@@ -446,7 +453,7 @@ const ManualBookingForm = () => {
             </select>
           </div>
           
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <label htmlFor="dropoff" className="block text-sm font-medium text-gray-700 mb-1">
               Dropoff Location
             </label>
@@ -454,7 +461,7 @@ const ManualBookingForm = () => {
               id="dropoff"
               name="dropoff"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.dropoff}
               onChange={handleChange}
             >
@@ -467,7 +474,7 @@ const ManualBookingForm = () => {
             </select>
           </div>
           
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
               Date
             </label>
@@ -476,13 +483,13 @@ const ManualBookingForm = () => {
               id="date"
               name="date"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.date}
               onChange={handleChange}
             />
           </div>
           
-          <div>
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">
               Time
             </label>
@@ -491,17 +498,17 @@ const ManualBookingForm = () => {
               id="time"
               name="time"
               required
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-all duration-300 hover:shadow-md"
               value={formData.time}
               onChange={handleChange}
             />
           </div>
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex justify-end animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
           <button
             type="submit"
-            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
           >
             Create Booking
           </button>

@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext.jsx';
+import { useEffect } from 'react';
 import './App.css';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
@@ -26,38 +27,56 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Page transition component
+const PageTransition = ({ children }) => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+  }, [location]);
+  
+  return (
+    <div className="page-transition">
+      {children}
+    </div>
+  );
+};
+
 function App() {
   const { user } = useAuth();
   
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/booking" element={
-            <ProtectedRoute>
-              <BookingFlow />
-            </ProtectedRoute>
-          } />
-          <Route path="/group/:groupId" element={
-            <ProtectedRoute>
-              <GroupManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin" element={
-            <ProtectedRoute>
-              <AdminPanel />
-            </ProtectedRoute>
-          } />
-        </Routes>
-      </div>
+      <PageTransition>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/booking" element={
+              <ProtectedRoute>
+                <BookingFlow />
+              </ProtectedRoute>
+            } />
+            <Route path="/group/:groupId" element={
+              <ProtectedRoute>
+                <GroupManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </div>
+      </PageTransition>
     </Router>
   );
 }
