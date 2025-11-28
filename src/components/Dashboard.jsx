@@ -78,7 +78,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+        <div className="w-full px-4 py-6 flex justify-between items-center">
           <div className="animate-fade-in-left">
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-600">Welcome back, {user?.name || 'User'}!</p>
@@ -110,7 +110,7 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className={`max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <main className={`w-full px-4 py-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         {/* Quick Booking Form */}
         <div className="bg-white shadow rounded-lg p-6 mb-8 card-hover animate-fade-in-up">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Book a Ride</h2>

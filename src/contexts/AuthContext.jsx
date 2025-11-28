@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -16,63 +17,114 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in (in a real app, you would verify the token with backend)
+    // Check if user is logged in
     const token = localStorage.getItem('authToken');
     if (token) {
-      // Simulate fetching user data
-      setTimeout(() => {
-        setUser({
-          id: 1,
-          name: 'Priya Sharma',
-          email: 'priya@du.edu.in',
-          college: 'Delhi University',
-          avatar: 'PS'
-        });
-        setLoading(false);
-      }, 500);
+      // In a real app, verify token with backend
+      // For now, we'll just simulate a user if a token exists
+      // You should implement a /profile endpoint to get user data from token
+      setUser({
+         name: 'User',
+         email: 'user@example.com'
+      });
+      setLoading(false);
     } else {
       setLoading(false);
     }
   }, []);
 
-  const login = (email, password) => {
-    // In a real app, you would call the API
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email.endsWith('.edu.in') && password) {
-          const userData = {
-            id: 1,
-            name: 'Priya Sharma',
-            email: email,
-            college: 'Delhi University',
-            avatar: 'PS'
-          };
-          setUser(userData);
-          localStorage.setItem('authToken', 'fake-jwt-token');
-          resolve(userData);
-        } else {
-          reject(new Error('Invalid credentials'));
-        }
-      }, 1000);
-    });
+  const login = async (email, password) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      console.log('Attempting login with:', { email }); // Log attempt
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/auth/login',
+        { email, password },
+        config
+      );
+
+      console.log('Login success:', data); // Log success
+
+      localStorage.setItem('authToken', data.token);
+      setUser(data);
+      return data;
+    } catch (error) {
+      console.error('Login Error:', error);
+      if (error.response) {
+        console.error('Error Response:', error.response.data);
+        console.error('Error Status:', error.response.status);
+      } else if (error.request) {
+        console.error('Error Request:', error.request);
+      } else {
+        console.error('Error Message:', error.message);
+      }
+      throw new Error(error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message);
+    }
   };
 
-  const register = (userData) => {
-    // In a real app, you would call the API
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newUser = {
-          id: Date.now(),
-          name: userData.fullName,
-          email: userData.email,
-          college: 'Delhi University',
-          avatar: userData.fullName.split(' ').map(n => n[0]).join('')
-        };
-        setUser(newUser);
-        localStorage.setItem('authToken', 'fake-jwt-token');
-        resolve(newUser);
-      }, 1000);
-    });
+  const register = async (userData) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      console.log('Attempting register with:', userData); // Log attempt
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/auth/register',
+        userData,
+        config
+      );
+
+      console.log('Register success:', data); // Log success
+
+      localStorage.setItem('authToken', data.token);
+      setUser(data);
+      return data;
+    } catch (error) {
+      console.error('Register Error:', error);
+      if (error.response) {
+        console.error('Error Response:', error.response.data);
+      }
+      throw new Error(error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message);
+    }
+  };
+
+  const googleLogin = async (credentialResponse) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/auth/google',
+        { idToken: credentialResponse.credential },
+        config
+      );
+
+      localStorage.setItem('authToken', data.token);
+      setUser(data);
+      return data;
+    } catch (error) {
+       console.error('Google Login Error:', error);
+       throw new Error(error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message);
+    }
   };
 
   const logout = () => {
@@ -84,6 +136,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     register,
+    googleLogin,
     logout,
     loading
   };

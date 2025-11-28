@@ -36,7 +36,7 @@ const AdminPanel = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full px-4 py-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-900 animate-fade-in-left">Admin Dashboard</h1>
             <button className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 animate-fade-in-right">
@@ -46,7 +46,7 @@ const AdminPanel = () => {
         </div>
       </header>
 
-      <main className={`max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <main className={`w-full px-4 py-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white shadow rounded-lg p-6 card-hover animate-fade-in-up" style={{ animationDelay: '0.1s' }}>

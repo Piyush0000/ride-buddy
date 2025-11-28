@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,11 +10,23 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      await googleLogin(credentialResponse);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Google Login Failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,11 +36,8 @@ const Login = () => {
       return;
     }
     
-    // Check if email is a college email (.edu.in)
-    if (!email.endsWith('.edu.in')) {
-      setError('Please use your college email address (.edu.in)');
-      return;
-    }
+    // Allow any email address
+    // Removed college email requirement
     
     setLoading(true);
     try {
@@ -52,7 +62,7 @@ const Login = () => {
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Use your college email to access RideBuddy
+            Sign in to your RideBuddy account
           </p>
         </div>
         {error && (
@@ -67,7 +77,7 @@ const Login = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               <label htmlFor="email-address" className="sr-only">
-                College Email Address
+                Email Address
               </label>
               <input
                 id="email-address"
@@ -76,7 +86,7 @@ const Login = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all duration-300 hover:shadow-md"
-                placeholder="College Email Address (.edu.in)"
+                placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -113,29 +123,27 @@ const Login = () => {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-300">
+              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
                 Forgot your password?
               </a>
             </div>
           </div>
-
-          <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
-            >
-              {loading ? (
-                <>
-                  <div className="loading-spinner mr-2"></div>
-                  Signing in...
-                </>
-              ) : (
-                'Sign in'
-              )}
-            </button>
-          </div>
         </form>
+        
+        <div className="relative flex justify-center text-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <span className="px-2 bg-white text-gray-500">Or continue with</span>
+        </div>
+        
+        <div className="animate-fade-in-up flex justify-center" style={{ animationDelay: '0.5s' }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => {
+              setError('Google Login Failed');
+            }}
+            useOneTap
+          />
+        </div>
+        
         <div className="text-sm text-center animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
           <p className="text-gray-600">
             Don't have an account?{' '}
