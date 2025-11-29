@@ -16,9 +16,29 @@ const generateToken = (id) => {
 const authUser = async (req, res) => {
   const { email, password } = req.body;
 
+  // Validate required fields
+  if (!email || !password) {
+    res.status(400).json({ message: 'Email and password are required' });
+    return;
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    res.status(400).json({ message: 'Please enter a valid email address' });
+    return;
+  }
+
   const user = await User.findOne({ email });
 
+  // Check if user exists and password is correct
   if (user && (await user.matchPassword(password))) {
+    // Check if user is banned
+    if (user.isBanned) {
+      res.status(401).json({ message: 'Account has been banned' });
+      return;
+    }
+
     res.json({
       _id: user._id,
       name: user.name,
@@ -38,6 +58,33 @@ const authUser = async (req, res) => {
 // @access  Public
 const registerUser = async (req, res) => {
   const { name, email, password, phone, college } = req.body;
+
+  // Validate required fields
+  if (!name || !email || !password) {
+    res.status(400).json({ message: 'Name, email, and password are required' });
+    return;
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    res.status(400).json({ message: 'Please enter a valid email address' });
+    return;
+  }
+
+  // No specific email domain validation required
+
+  // Validate password length
+  if (password.length < 6) {
+    res.status(400).json({ message: 'Password must be at least 6 characters' });
+    return;
+  }
+
+  // Validate phone number format (if provided)
+  if (phone && !/^\d{10}$/.test(phone)) {
+    res.status(400).json({ message: 'Please enter a valid 10-digit phone number' });
+    return;
+  }
 
   const userExists = await User.findOne({ email });
 

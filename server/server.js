@@ -3,12 +3,14 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import rideRoutes from './routes/rideRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
-console.log('Starting server.js...');
 dotenv.config();
 
-console.log('Connecting to DB...');
-connectDB().then(() => console.log('DB Connection Attempted'));
+connectDB();
 
 const app = express();
 
@@ -26,6 +28,10 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/rides', rideRoutes);
+app.use('/api/groups', groupRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

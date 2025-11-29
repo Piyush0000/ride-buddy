@@ -38,7 +38,23 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
-  }
+  },
+  isBanned: {
+    type: Boolean,
+    default: false
+  },
+  paymentVerified: {
+    type: Boolean,
+    default: false
+  },
+  activeRideId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Ride'
+  },
+  pastRides: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Ride'
+  }]
 }, {
   timestamps: true
 });

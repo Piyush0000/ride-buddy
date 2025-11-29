@@ -20,14 +20,31 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in
     const token = localStorage.getItem('authToken');
     if (token) {
-      // In a real app, verify token with backend
-      // For now, we'll just simulate a user if a token exists
-      // You should implement a /profile endpoint to get user data from token
-      setUser({
-         name: 'User',
-         email: 'user@example.com'
-      });
-      setLoading(false);
+      // Verify token with backend to get real user data
+      const fetchUserProfile = async () => {
+        try {
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          };
+
+          const { data } = await axios.get(
+            'http://localhost:5000/api/auth/profile',
+            config
+          );
+
+          setUser(data);
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+          localStorage.removeItem('authToken');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserProfile();
     } else {
       setLoading(false);
     }
