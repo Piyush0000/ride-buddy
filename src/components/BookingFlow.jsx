@@ -6,6 +6,7 @@ import { calculateFareBreakdown } from '../utils/paymentUtils.js';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight, Car, Users, CreditCard, MapPin, Calendar, Clock } from 'lucide-react';
+import { uberAPI } from '../services/api.js';
 
 const BookingFlow = () => {
   const [step, setStep] = useState(1);
@@ -315,6 +316,15 @@ const RouteSelection = ({ onNext, pickupLocations, dropoffLocations }) => {
       );
       
       console.log('Ride created:', data);
+      
+      // Create Uber tracking link
+      try {
+        await uberAPI.createUberLink(rideData);
+        console.log('Uber tracking link created');
+      } catch (uberError) {
+        console.error('Failed to create Uber tracking link:', uberError);
+      }
+      
       onNext();
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to create ride');

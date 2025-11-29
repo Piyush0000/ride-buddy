@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Sparkles, Bell, LogOut, Car, Calendar, Users, MapPin, Clock } from 'lucide-react';
+import { Sparkles, Bell, LogOut, Car, Calendar, Users, MapPin, Clock, Award } from 'lucide-react';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -403,6 +403,19 @@ const Dashboard = () => {
               >
                 Past Rides
               </button>
+              <button
+                onClick={() => setActiveTab('uber')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'uber'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center">
+                  <Award className="mr-1 h-4 w-4" />
+                  Uber Tracking
+                </div>
+              </button>
             </nav>
           </div>
 
@@ -511,6 +524,12 @@ const Dashboard = () => {
                 )}
               </div>
             )}
+            
+            {activeTab === 'uber' && (
+              <div className="space-y-4">
+                <UberTrackingSection user={user} />
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -554,5 +573,129 @@ const Dashboard = () => {
     </div>
   );
 };
+
+const UberTrackingSection = ({ user }) => {
+  const [trackingRecords, setTrackingRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [showProofForm, setShowProofForm] = useState(false);
+  const [proofData, setProofData] = useState({
+    actualFare: '',
+    proofImage: ''
+  });
+
+  useEffect(() => {
+    fetchTrackingRecords();
+  }, []);
+
+  const fetchTrackingRecords = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      };
+      
+      const { data } = await axios.get(
+        'http://localhost:5000/api/uber/my-tracking',
+        config
+      );
+      
+      setTrackingRecords(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to fetch tracking records');
+      setLoading(false);
+    }
+  };
+
+  const handleUploadProof = async (trackingId) => {
+    setSelectedRecord(trackingId);
+    setShowProofForm(true);
+  };
+
+  const handleProofSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const payload = {
+        trackingId: selectedRecord,
+        actualFare: parseFloat(proofData.actualFare),
+        proofImage: proofData.proofImage
+      };
+      
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      };
+      
+      await axios.post(
+        'http://localhost:5000/api/uber/upload-proof',
+        payload,
+        config
+      );
+      
+      // Refresh the tracking records
+      fetchTrackingRecords();
+      
+      // Reset form and close modal
+      setProofData({ actualFare: '', proofImage: '' });
+      setShowProofForm(false);
+      setSelectedRecord(null);
+      
+      alert('Proof uploaded successfully!');
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Failed to upload proof');
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'created': return 'bg-yellow-100 text-yellow-800';
+      case 'clicked': return 'bg-blue-100 text-blue-800';
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'commission_paid': return 'bg-purple-100 text-purple-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'created': return 'Created';
+      case 'clicked': return 'Clicked';
+      case 'completed': return 'Completed';
+      case 'commission_paid': return 'Commission Paid';
+      default: return status;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="loading-spinner mr-2"></div>
+        <span>Loading tracking records...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <motion.div 
+        className="rounded-md bg-red-50 p-4 mb-4"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="text-sm text-red-700">
+          {error}
+        </div>
+      </motion.div>
+    );
+  }
+}
 
 export default Dashboard;

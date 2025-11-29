@@ -7,6 +7,7 @@ import rideRoutes from './routes/rideRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import uberRoutes from './routes/uberRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/rides', rideRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/uber', uberRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

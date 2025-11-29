@@ -91,6 +91,21 @@ export const paymentAPI = {
     api.get(`/payments/${paymentId}`)
 };
 
+// Uber APIs
+export const uberAPI = {
+  createUberLink: (rideData) => 
+    api.post('/uber/create-link', rideData),
+  
+  uploadRideProof: (proofData) => 
+    api.post('/uber/upload-proof', proofData),
+  
+  getMyTrackingRecords: () => 
+    api.get('/uber/my-tracking'),
+  
+  getTrackingRecord: (trackingId) => 
+    api.get(`/uber/tracking/${trackingId}`)
+};
+
 // Notification APIs
 export const notificationAPI = {
   getNotifications: (userId) => 

@@ -54,7 +54,11 @@ const userSchema = mongoose.Schema({
   pastRides: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ride'
-  }]
+  }],
+  commissionBalance: {
+    type: Number,
+    default: 0
+  }
 }, {
   timestamps: true
 });
