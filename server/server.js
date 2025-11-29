@@ -4,9 +4,11 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 
+console.log('Starting server.js...');
 dotenv.config();
 
-connectDB();
+console.log('Connecting to DB...');
+connectDB().then(() => console.log('DB Connection Attempted'));
 
 const app = express();
 

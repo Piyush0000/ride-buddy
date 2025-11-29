@@ -409,6 +409,7 @@ const LandingPage = () => {
                   ]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
+                onClick={() => navigate('/register')}
               >
                 <span className="relative z-10 flex items-center">
                   <Rocket className="mr-3 w-6 h-6 group-hover:rotate-45 transition-transform" />
@@ -755,6 +756,11 @@ const LandingPage = () => {
         </div>
       </section>
 
+
+   
+   
+
+
       {/* Testimonials */}
       <section id="testimonials" className="py-20 px-4 relative">
         <div className="w-full mx-auto">
@@ -905,6 +911,7 @@ const LandingPage = () => {
               ]
             }}
             transition={{ duration: 2, repeat: Infinity }}
+            onClick={() => navigate('/register')}
           >
             <span className="relative z-10 flex items-center">
               <Rocket className="mr-4 w-8 h-8 group-hover:rotate-45 transition-transform" />
